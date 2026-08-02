@@ -1,4 +1,6 @@
 # Octo
+![Octo Logo](logo.png)
+
 This is a coding language (octo.cloud) associated with octopuses
 wiki - https://github.com/brodawgissocool-genza/Octo/wiki
 
