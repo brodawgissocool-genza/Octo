@@ -1,1 +1,12 @@
-{}
+{
+  "language_name": "Octo",
+  "current_version": "1.0.0",
+  "dependencies": {
+    "graphics_engine": "draw.py",
+    "required_axis": "AxisYXZ"
+  },
+  "runtime_files": {
+    "python_engine": "OctoBuild.py",
+    "luau_engine": "OctoBuild.luau"
+  }
+}
