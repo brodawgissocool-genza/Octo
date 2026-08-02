@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Octo Web IDE</title>
+    
+    <!-- Modern typography styling -->
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Include Monaco Editor core styles from CDN -->
+    <link rel="stylesheet" data-name="vs/editor/main" href="https://cloudflare.com">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #21262d;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #58a6ff;
+        }
+        .run-btn {
+            background-color: #238636;
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: background 0.2s;
+        }
+        .run-btn:hover {
+            background-color: #2ea043;
+        }
+        /* Layout Grid split into Left (Editor) and Right (Terminal) */
+        .workspace {
+            display: flex;
+            gap: 20px;
+            flex: 1;
+            min-height: 0; /* Prevents container flex overflow */
+        }
+        #editor-container {
+            flex: 3;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .output-panel {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            background-color: #050505;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+        .output-panel h2 {
+            margin: 0 0 10px 0;
+            font-size: 1rem;
+            color: #ff7b72;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        #terminal {
+            flex: 1;
+            font-family: 'JetBrains Mono', monospace;
+            color: #4ade80;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🐙 Octo Online IDE (octo.cloud)</h1>
+        <button class="run-btn" onclick="runOctoCode()">▶ Run Script</button>
+    </header>
+
+    <div class="workspace">
+        <!-- The Monaco Editor Workspace container injection node -->
+        <div id="editor-container"></div>
+
+        <!-- Live Sandbox Terminal Output Window -->
+        <div class="output-panel">
+            <h2>System Output Window</h2>
+            <pre id="terminal">System initialized. Awaiting program execution pipeline...</pre>
+        </div>
+    </div>
+
+    <!-- Configure AMD loader paths required by Monaco CDN -->
+    <script>var require = { paths: { 'vs': 'https://cloudflare.com' } };</script>
+    <script src="https://cloudflare.com/loader.min.js"></script>
+    <script src="https://cloudflare.com/editor/main.nls.min.js"></script>
+    <script src="https://cloudflare.com/editor/main.js"></script>
+
+    <script>
+        // Default Octo code snippet that pre-populates the workspace on boot
+        const initialCode = `// Welcome to the Octo.cloud platform environment\nvar AxisYXZ\nSquirt("Initializing graphics modules...")\nDrawOn(AxisYXZ, 10, 5, 0)\nSplash("OCTO ENGINE LAUNCHED")`;
+
+        // Boot and initialize the VS Code style editor viewport
+        const editor = monaco.editor.create(document.getElementById('editor-container'), {
+            value: initialCode,
+            language: 'javascript', // Temporarily fallback to basic syntax styling rules
+            theme: 'vs-dark',
+            automaticLayout: true,
+            fontSize: 14,
+            fontFamily: 'JetBrains Mono'
+        });
+
+        // The JavaScript Browser Engine: Simulates executing Octo tokens in real-time
+        function runOctoCode() {
+            const lines = editor.getValue().split('\n');
+            const terminal = document.getElementById('terminal');
+            terminal.textContent = ""; // Flush old execution memory logs
+            
+            let mockVariables = {};
+            let isDrawImported = true; // Set to true to bypass recall violation logic
+
+            for (let line of lines) {
+                line = line.trim();
+                
+                // Skip comment token validation checks
+                if (line.startsWith('//') || line === '') continue;
+
+                // var operator processing parsing logic
+                if (line.startsWith('var ')) {
+                    const varName = line.replace('var ', '').trim();
+                    mockVariables[varName] = null;
+                    terminal.textContent += `[MEMALLOC] Registered NIL variable: ${varName}\n`;
+                    continue;
+                }
+
+                // Squirt() standard output processing loop injection
+                if (line.startsWith('Squirt(')) {
+                    const match = line.match(/Squirt\("(.*?)"\)/);
+                    if (match) {
+                        terminal.textContent += `${match[1]}\n`;
+                    }
+                    continue;
+                }
+
+                // Splash() screen alert processor logic
+                if (line.startsWith('Splash(')) {
+                    const match = line.match(/Splash\("(.*?)"\)/);
+                    if (match) {
+                        terminal.textContent += `[SCREEN DISPLAY ALERT]: ${match[1]}\n`;
+                    }
+                    continue;
+                }
+
+                // DrawOn() constraint verification check against AxisYXZ lore rule specifications
+                if (line.startsWith('DrawOn(')) {
+                    if (!isDrawImported) {
+                        terminal.textContent += `❌ SYSTEM CRASH: Recall violation in AxisYXZ. Axises are useless without draw.py imported!\n`;
+                        break;
+                    } else {
+                        terminal.textContent += `🎨 Rendering graphical vectors dynamically on designated axis coordinate coordinates...\n`;
+                    }
+                    continue;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
