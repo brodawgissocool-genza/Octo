@@ -7,3 +7,6 @@ local function readluau()
   print("MIT")
   --- running
   --- going to json directory 
+end
+
+--!strict
