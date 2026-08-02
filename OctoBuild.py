@@ -51,3 +51,20 @@ codeLines = rawOctoCode.split("\n")
 for line in codeLines:
     if line != "":
         runCommand(line)
+
+
+import json
+
+def load_octo_config():
+    try:
+        with open('OctoBuilds.json', 'r') as file:
+            config = json.load(file)
+            print(f"Successfully synced with {config['language_name']} core parameters.")
+            return config
+    except FileNotFoundError:
+        print("Warning: OctoBuilds.json tracking file is missing.")
+        return None
+
+# Load settings at startup
+config_data = load_octo_config()
+
