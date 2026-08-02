@@ -10,3 +10,5 @@ local function readluau()
 end
 
 --!strict
+local octopusCount: number = 8
+local languageName: string = "Octo"
