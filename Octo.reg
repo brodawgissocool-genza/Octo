@@ -1,0 +1,13 @@
+Windows Registry Editor Version 5.00
+
+; 1. Tells Windows that .oct files belong to the Octo language handler
+[HKEY_CURRENT_USER\Software\Classes\.oct]
+@="OctoScriptFile"
+
+; 2. Sets the friendly text description people see in File Explorer
+[HKEY_CURRENT_USER\Software\Classes\OctoScriptFile]
+@="Octo Language Source File"
+
+; 3. Tells Windows to open .oct files with Notepad when double-clicked
+[HKEY_CURRENT_USER\Software\Classes\OctoScriptFile\shell\open\command]
+@="notepad.exe \"%1\""
